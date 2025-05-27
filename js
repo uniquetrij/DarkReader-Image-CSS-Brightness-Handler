@@ -31,8 +31,8 @@ function getImageLuminance(el, callback) {
 	const ctx = canvas.getContext('2d');
 
 	function processImage(img) {
-		canvas.width = img.width || 300;
-		canvas.height = img.height || 150;
+	 canvas.width = img.width || 300;
+	 canvas.height = img.height || 150;
 		ctx.drawImage(img, 0, 0);
 
 		try {
@@ -142,12 +142,12 @@ function applyToBackgroundImages(fn) {
 function applyBrightness() {
 	console.log('[[Apply Brightness → All Images]]');
 	updateUserJSAndCSSTag(`
-		img, svg,	canvas, ::before, ::after {
+		img, svg, canvas, ::before, ::after {
 			filter: brightness(0.3);
 			transition: filter 0.3s ease;
 		}
 `);
-	document.querySelectorAll('img, svg,	canvas').forEach(handleImageElement);
+	document.querySelectorAll('img, svg, canvas').forEach(handleImageElement);
 	applyToBackgroundImages(handleImageElement);
 	dimLightBackgrounds();
 }
@@ -155,12 +155,12 @@ function applyBrightness() {
 function resetBrightness() {
 	console.log('[[Reset Brightness → All Images]]');
 	updateUserJSAndCSSTag(`
-    img, svg,	canvas, ::before, ::after {
+    img, svg, canvas, ::before, ::after {
       transition: filter 0.3s ease;
     }
 `);
 	document
-		.querySelectorAll('img, svg,	canvas')
+		.querySelectorAll('img, svg, canvas')
 		.forEach((img) => (img.style.filter = ''));
 	applyToBackgroundImages((el) => (el.style.filter = ''));
 	resetBackgroundBrightness();
