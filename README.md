@@ -3,12 +3,17 @@
 ```CSS
 img,
 svg,
+video,
 canvas,
-::after,
-::before {
-	filter: brightness(0.3);
-	transition: filter 0.3s ease;
+::before,
+::after {
+    filter: brightness(0.3);
 }
-
+img:hover,
+svg:hover,
+video:hover {
+    filter: brightness(0.5);
+    transition: filter .3s ease;
+}
 
 ```
