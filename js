@@ -150,11 +150,6 @@ function applyBrightness() {
 	document.querySelectorAll('img, svg, canvas').forEach(handleImageElement);
 	applyToBackgroundImages(handleImageElement);
 	dimLightBackgrounds();
-	// updateUserJSAndCSSTag(`
-	//     img, svg, canvas {
-	//       transition: filter 0.3s ease;
-	//     }
-	// `);
 }
 
 function resetBrightness() {
