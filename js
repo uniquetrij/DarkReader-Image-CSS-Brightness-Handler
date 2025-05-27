@@ -3,6 +3,10 @@
  * Dims images, canvas, SVGs, and bright solid backgrounds when Dark Reader is active.
  */
 
+const DEBUG = true;
+
+if (DEBUG) console.log = function () {};
+
 console.log('[[----DarkReader Brightness Handler INIT----]]');
 
 // --- Detect if Dark Reader is active ---
@@ -99,17 +103,30 @@ function updateImageBrightness(img, brightness, lum) {
 	}
 }
 
-const safeIdleCallback = window.requestIdleCallback || function (fn) {
-    return setTimeout(fn, 200);
-};
+const safeIdleCallback =
+	window.requestIdleCallback ||
+	function (fn) {
+		return setTimeout(fn, 200);
+	};
 
 function handleImageElement(img) {
-    if (img.width < 64 && img.height < 64) return;
-    safeIdleCallback(() => {
-        getImageLuminance(img, (lum) =>
-            updateImageBrightness(img, mapLuminanceToBrightness(lum), lum)
-        );
-    });
+	if (img.width < 64 || img.height < 32) {
+		img.style.filter = 'brightness(1.0)';
+		return;
+	}
+	if (img.width < 128 || img.height < 128) {
+		img.style.filter = 'brightness(0.7)';
+		return;
+	}
+		if (img.width < 256 || img.height < 512) {
+		img.style.filter = 'brightness(0.5)';
+		return;
+	}
+	safeIdleCallback(() => {
+		getImageLuminance(img, (lum) =>
+			updateImageBrightness(img, mapLuminanceToBrightness(lum), lum)
+		);
+	});
 }
 
 function applyToBackgroundImages(fn) {
@@ -125,7 +142,7 @@ function applyToBackgroundImages(fn) {
 function applyBrightness() {
 	console.log('[[Apply Brightness → All Images]]');
 	updateUserJSAndCSSTag(`
-    img {
+    img, svg, canvas {
       filter: brightness(0.3);
       transition: filter 0.3s ease;
     }
@@ -133,11 +150,20 @@ function applyBrightness() {
 	document.querySelectorAll('img, svg, canvas').forEach(handleImageElement);
 	applyToBackgroundImages(handleImageElement);
 	dimLightBackgrounds();
+	// updateUserJSAndCSSTag(`
+	//     img, svg, canvas {
+	//       transition: filter 0.3s ease;
+	//     }
+	// `);
 }
 
 function resetBrightness() {
 	console.log('[[Reset Brightness → All Images]]');
-	updateUserJSAndCSSTag('');
+	updateUserJSAndCSSTag(`
+    img, svg, canvas {
+      transition: filter 0.3s ease;
+    }
+`);
 	document
 		.querySelectorAll('img, svg, canvas')
 		.forEach((img) => (img.style.filter = ''));
@@ -223,3 +249,5 @@ function handleStyleChange() {
 const styleObserver = new MutationObserver(handleStyleChange);
 
 styleObserver.observe(document.head, { childList: true });
+
+isDarkReaderActive() ? applyBrightness() : resetBrightness();
