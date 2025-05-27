@@ -118,7 +118,7 @@ function handleImageElement(img) {
 		img.style.filter = 'brightness(0.7)';
 		return;
 	}
-		if (img.width < 256 || img.height < 512) {
+	if (img.width < 256 || img.height < 512) {
 		img.style.filter = 'brightness(0.5)';
 		return;
 	}
@@ -142,12 +142,12 @@ function applyToBackgroundImages(fn) {
 function applyBrightness() {
 	console.log('[[Apply Brightness → All Images]]');
 	updateUserJSAndCSSTag(`
-    img, svg, canvas {
-      filter: brightness(0.3);
-      transition: filter 0.3s ease;
-    }
+		img, svg,	canvas, ::before, ::after {
+			filter: brightness(0.3);
+			transition: filter 0.3s ease;
+		}
 `);
-	document.querySelectorAll('img, svg, canvas').forEach(handleImageElement);
+	document.querySelectorAll('img, svg,	canvas').forEach(handleImageElement);
 	applyToBackgroundImages(handleImageElement);
 	dimLightBackgrounds();
 }
@@ -155,12 +155,12 @@ function applyBrightness() {
 function resetBrightness() {
 	console.log('[[Reset Brightness → All Images]]');
 	updateUserJSAndCSSTag(`
-    img, svg, canvas {
+    img, svg,	canvas, ::before, ::after {
       transition: filter 0.3s ease;
     }
 `);
 	document
-		.querySelectorAll('img, svg, canvas')
+		.querySelectorAll('img, svg,	canvas')
 		.forEach((img) => (img.style.filter = ''));
 	applyToBackgroundImages((el) => (el.style.filter = ''));
 	resetBackgroundBrightness();
@@ -186,7 +186,7 @@ function computeRelativeLuminance({ r, g, b }) {
 
 function dimLightBackgrounds() {
 	const elements = document.querySelectorAll(
-		'body, html, div, section, main, article, header, footer'
+		'body, html, div, section, main, article, header, footer, ::after, :before'
 	);
 	elements.forEach((el) => {
 		const bgColor = window.getComputedStyle(el).backgroundColor;
@@ -208,7 +208,7 @@ function dimLightBackgrounds() {
 
 function resetBackgroundBrightness() {
 	const elements = document.querySelectorAll(
-		'body, html, div, section, main, article, header, footer'
+		'body, html, div, section, main, article, header, footer, ::after, :before'
 	);
 	elements.forEach((el) => (el.style.filter = ''));
 }
