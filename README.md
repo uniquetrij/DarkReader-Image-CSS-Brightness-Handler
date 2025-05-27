@@ -14,7 +14,8 @@ canvas,
 img:hover,
 svg:hover,
 video:hover,
-[style*="url"]:hover {
+[style*="url"]:hover
+{
     filter: brightness(0.5);
     transition: filter .3s ease, transform .3s ease-in-out !important;
 }
