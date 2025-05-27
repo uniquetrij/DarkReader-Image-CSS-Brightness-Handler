@@ -1,0 +1,1 @@
+# DarkReader-Image-CSS-Brightness-Handler
